@@ -3,6 +3,7 @@ from math import *
 import paths
 import matplotlib
 from matplotlib import pyplot as plt
+from time import sleep
 from matplotlib.animation import FuncAnimation
 
 
@@ -380,7 +381,6 @@ class PathGenerator:
 
         return g, paths.pathGenerate(points)
 
-
     def draw(self):
         agent_c = [t([0, 0])]
         agent_c_ = [t([0, 0])]
@@ -408,29 +408,14 @@ class PathGenerator:
 
         #plt.rcParams["figure.figsize"] = (5, 5)
         fig, ax = plt.subplots()
+        plt.ion()
         xdata, ydata, xdata_, ydata_ = [], [], [], []
         x, y = [], []
 
-        # path of object
-        object_path, = plt.plot([], [], 'r-', linewidth=3, animated=True)
-        # start pushing points
+        ax.set_xlim(-7, 5)
+        ax.set_ylim(-10, 2)
 
-        agent, = plt.plot([], [], 'ro', animated=True)
-        # end pushing points
-        #agent_, = plt.plot([], [], 'b*', animated=True, markersize=10)
-        # connecting line of all points, which is the path of agent
-        #agent_overall, = plt.plot([], [], 'k-', animated=True)
-        # box position and orientation
-        box, = plt.plot([], [], 'k-', animated=True)
-
-
-        def init():
-            ax.set_xlim(-7, 5)
-            ax.set_ylim(-10, 2)
-            return object_path, box#agent, #agent_, box, agent_overall
-
-        def update(frame):
-            print(frame)
+        for frame in range(len(g)):
             if frame == 0:
                 while len(xdata_) > 0:
                     xdata_.pop(0)
@@ -453,23 +438,28 @@ class PathGenerator:
             for i in range(len(self.box_vert)):
                 box_x.append(self.transPoint(self.box_vert[i], trans)[0])
                 box_y.append(self.transPoint(self.box_vert[i], trans)[1])
-            print(xdata)
-            agent.set_data(xdata, ydata)
-            #agent_.set_data(xdata_, ydata_)
-            object_path.set_data(g[:frame, 0], g[:frame, 1])
-            box.set_data(box_x, box_y)
-            #agent_overall.set_data(x, y)
+
+            # Object path
+            plt.plot(g[:frame, 0], g[:frame, 1], 'r-', linewidth=3)
+            # Agent
+            plt.plot(xdata, ydata, 'ro')
+            # agent_
+            plt.plot(xdata_, ydata_, 'b*', markersize=10)
+            # agent_overall
+            plt.plot(x, y, 'k-')
+            # box
+            plt.plot(box_x, box_y, 'k-')
+
             arrow = plt.arrow(xdata[-1], ydata[-1], xdata_[-1] - xdata[-1], ydata_[-1] - ydata[-1], head_width=0.05)
-            #text = plt.text(g_before[frame][0], g_before[frame][1], "G")
+            text = plt.text(g_before[frame][0], g_before[frame][1], "G")
 
             ax.add_patch(arrow)
+            #ax.add_patch(text)
+            print(frame)
+            plt.draw()
+            #plt.show()
+            sleep(0.5)
 
-            return object_path, box#agent, #agent_, box, agent_overall, arrow, text
-
-        ani = FuncAnimation(fig, update, frames=t(range(len(g))),
-                            interval=240, init_func=init, blit=True)
-        # ani.save("triangle.mp4", writer=writer)
-        plt.show()
 
 
 if __name__ == '__main__':

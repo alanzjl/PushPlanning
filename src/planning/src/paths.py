@@ -277,7 +277,7 @@ class ChainPath(MotionPath):
                 trans = rigid(state)
             else:
                 return compute_twist(trans, state, self.subpaths[i].target_state(tmp))
-        print "path error"
+        print("path error")
         exit(1)
 
     def target_velocity(self, s):
@@ -302,7 +302,7 @@ class ChainPath(MotionPath):
                 tmp -= self.subpaths[i].total_length
             else:
                 return self.subpaths[i].target_velocity(tmp)
-        print "finding target_vel error"
+        print("finding target_vel error")
         exit(1)
     
     def transform_dest(self, s, state_):
@@ -436,6 +436,6 @@ if __name__ == '__main__':
     # path = compute_obstacle_avoid_path(0., [1.0, 0.0], 0.5)
     # path = parallel_parking_path
     path = pathGenerate([(1,0), (2, 1), (3, 0)])
-    print path.total_length
+    print(path.total_length)
     print(path.end_state)
     plot_path(path)
