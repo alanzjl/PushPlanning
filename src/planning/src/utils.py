@@ -1,8 +1,12 @@
 import numpy as np
 from math import sin, cos, atan2
+<<<<<<< HEAD
 
 
 # from geometry_msgs.msg._Point import Point
+=======
+#from geometry_msgs.msg._Point import Point
+>>>>>>> d28233c9cbaec83231cf2504e30c68a5ded6a212
 
 def vec(*args):
     if len(args) == 1:
